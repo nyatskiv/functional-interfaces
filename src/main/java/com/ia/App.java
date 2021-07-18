@@ -1,11 +1,13 @@
 package com.ia;
 
-import com.ia.service.AddCommandService;
-import com.ia.service.DivideCommandService;
-import com.ia.service.MultiplyCommandService;
-import com.ia.service.SubtractCommandService;
+import com.ia.service.*;
+import com.ia.util.COMMAND;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * Hello world!
@@ -13,58 +15,38 @@ import java.util.Scanner;
  */
 public class App
 {
+    private static final AddCommandService addCommandService = new AddCommandService();
+    private static final DivideCommandService divideCommandService = new DivideCommandService();
+    private static final MultiplyCommandService multiplyCommandService = new MultiplyCommandService();
+    private static final SubtractCommandService subtractCommandService = new SubtractCommandService();
+    private static final MenuService menuService = new MenuService();
+
     public static void main( String[] args )
     {
-        AddCommandService addCommandService = new AddCommandService();
-        DivideCommandService divideCommandService = new DivideCommandService();
-        MultiplyCommandService multiplyCommandService = new MultiplyCommandService();
-        SubtractCommandService subtractCommandService = new SubtractCommandService();
+        try {
 
-        Scanner in = new Scanner(System.in);
+            Map<COMMAND, BiFunction<Double, Double, Double>> commandsMap = new HashMap<>();
+            commandsMap.put(COMMAND.ADD, addCommandService::add);
+            commandsMap.put(COMMAND.MULTIPLY, multiplyCommandService::multiply);
+            commandsMap.put(COMMAND.DIVIDE, divideCommandService::divide);
+            commandsMap.put(COMMAND.SUBTRACT, subtractCommandService::subtract);
 
-        Double firstNumber = 0.;
-        Double secondNumber = 0.;
-        Double result = 0.;
+            Scanner in = new Scanner(System.in);
 
-        System.out.println("Please enter your first number:");
-        firstNumber = in.nextDouble();
+            System.out.println("Please enter your first number:");
+            Double firstNumber = in.nextDouble();
 
-        System.out.println("Please enter your first number:");
-        secondNumber = in.nextDouble();
+            System.out.println("Please enter your first number:");
+            Double secondNumber = in.nextDouble();
 
-        System.out.println("1\t Add");
-        System.out.println("2\t Subtract");
-        System.out.println("3\t Multiply");
-        System.out.println("4\t Divide");
+            menuService.displayMenu();
 
-        System.out.println("Please enter your command from the list [Add, Subtract, Multiply, Divide]:");
+            String choice = in.next();
+            Double result = commandsMap.get(COMMAND.fromString(choice)).apply(firstNumber, secondNumber);
 
-        //Get user's choice
-        String choice = in.next();
-
-        //Display the title of the chosen module
-        switch (choice) {
-            case "Add": {
-                result = addCommandService.add(firstNumber, secondNumber);
-                System.out.printf("Result: %s%n", result);
-                break;
-            }
-            case "Subtract": {
-                result = subtractCommandService.subtract(firstNumber, secondNumber);
-                System.out.printf("Result: %s%n", result);
-                break;
-            }
-            case "Multiply": {
-                result = multiplyCommandService.multiply(firstNumber, secondNumber);
-                System.out.printf("Result: %s%n", result);
-                break;
-            }
-            case "Divide": {
-                result = divideCommandService.divide(firstNumber, secondNumber);
-                System.out.printf("Result: %s%n", result);
-                break;
-            }
-            default: System.out.println("Invalid choice");
+            System.out.printf("Result: %s", result);
+        } catch (Exception e) {
+            System.out.println("Error happened");
         }
     }
 }
