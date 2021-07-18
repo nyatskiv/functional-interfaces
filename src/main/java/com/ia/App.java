@@ -2,35 +2,29 @@ package com.ia;
 
 import com.ia.service.*;
 import com.ia.util.COMMAND;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
-/**
- * Hello world!
- *
- */
-public class App
-{
+
+public class App {
     private static final AddCommandService addCommandService = new AddCommandService();
     private static final DivideCommandService divideCommandService = new DivideCommandService();
     private static final MultiplyCommandService multiplyCommandService = new MultiplyCommandService();
     private static final SubtractCommandService subtractCommandService = new SubtractCommandService();
     private static final MenuService menuService = new MenuService();
+    private static final Map<COMMAND, BiFunction<Double, Double, Double>> commandsMap = new HashMap<>();
 
-    public static void main( String[] args )
-    {
+    static {
+        commandsMap.put(COMMAND.ADD, addCommandService::add);
+        commandsMap.put(COMMAND.MULTIPLY, multiplyCommandService::multiply);
+        commandsMap.put(COMMAND.DIVIDE, divideCommandService::divide);
+        commandsMap.put(COMMAND.SUBTRACT, subtractCommandService::subtract);
+    }
+
+    public static void main( String[] args ) {
         try {
-
-            Map<COMMAND, BiFunction<Double, Double, Double>> commandsMap = new HashMap<>();
-            commandsMap.put(COMMAND.ADD, addCommandService::add);
-            commandsMap.put(COMMAND.MULTIPLY, multiplyCommandService::multiply);
-            commandsMap.put(COMMAND.DIVIDE, divideCommandService::divide);
-            commandsMap.put(COMMAND.SUBTRACT, subtractCommandService::subtract);
-
             Scanner in = new Scanner(System.in);
 
             System.out.println("Please enter your first number:");

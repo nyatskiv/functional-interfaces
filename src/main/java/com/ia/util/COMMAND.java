@@ -1,5 +1,7 @@
 package com.ia.util;
 
+import java.util.Arrays;
+
 public enum COMMAND {
     ADD("Add"),
     MULTIPLY("Multiply"),
@@ -12,17 +14,11 @@ public enum COMMAND {
         this.command = command;
     }
 
-    public String getCommand() {
-        return this.command;
-    }
-
-    public static COMMAND fromString(String text) {
-        for (COMMAND b : COMMAND.values()) {
-            if (b.command.equalsIgnoreCase(text)) {
-                return b;
-            }
-        }
-        return null;
+    public static COMMAND fromString(String value) {
+        return Arrays.stream(COMMAND.values())
+                .filter(commandEnum -> commandEnum.command.equalsIgnoreCase(value))
+                .findFirst()
+                .orElse(null);
     }
 
 }

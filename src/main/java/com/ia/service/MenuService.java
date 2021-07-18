@@ -1,6 +1,7 @@
 package com.ia.service;
 
 public class MenuService {
+
     public MenuService() {
     }
 
