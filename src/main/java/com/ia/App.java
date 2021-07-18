@@ -30,7 +30,7 @@ public class App {
             System.out.println("Please enter your first number:");
             Double firstNumber = in.nextDouble();
 
-            System.out.println("Please enter your first number:");
+            System.out.println("Please enter your second number:");
             Double secondNumber = in.nextDouble();
 
             menuService.displayMenu();
